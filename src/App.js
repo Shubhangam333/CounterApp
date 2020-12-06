@@ -1,25 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+// Provider, connect - react-redux
 
-function App() {
+import React from 'react';
+import Counter from './Counter';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
+import { Provider } from 'react-redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import Modal from './Modal';
+
+import countReducer from './countReducer';
+import modalReducer from './modalReducer';
+
+const middleware = [thunk];
+// setup store
+const store = createStore(
+  combineReducers({
+    countState: countReducer,
+    modalState: modalReducer,
+  }),
+  composeWithDevTools(applyMiddleware(...middleware))
+);
+// store.dispatch(getProducts());
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Provider store={store}>
+      <Counter />
+      <Modal />
+    </Provider>
   );
-}
+};
 
 export default App;
